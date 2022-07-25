@@ -16,7 +16,7 @@ describe("User tests suit", () => {
         
         const login = userFactory.createLogin();
 
-        const result = await agent.post("/signup").send(login);
+        const result = await agent.post("/sign-up").send(login);
         const status = result.status;
         
         expect(status).toEqual(201);
@@ -33,7 +33,7 @@ describe("User tests suit", () => {
         const login = userFactory.createLogin();
         delete login.password;
     
-        const response = await supertest(app).post(`/signup`).send(login);
+        const response = await supertest(app).post(`/sign-up`).send(login);
         expect(response.status).toBe(422);
       });
       
@@ -42,7 +42,7 @@ describe("User tests suit", () => {
         const login = userFactory.createLogin();
         const user: any = await userFactory.createUser(login);
         
-        const response = await supertest(app).post(`/signin`).send({
+        const response = await supertest(app).post(`/sign-in`).send({
           email: user.email,
           password: user.plainPassword
         });
@@ -55,7 +55,7 @@ describe("User tests suit", () => {
         const login = userFactory.createLogin();
         const user = userFactory.createUser(login);
     
-        const response = await supertest(app).post(`/signin`).send({...login, password: "outropassword"});
+        const response = await supertest(app).post(`/sign-in`).send({...login, password: "outropassword"});
         expect(response.status).toBe(401);
       });
 
@@ -64,7 +64,7 @@ describe("User tests suit", () => {
         const login = userFactory.createLogin();
         await userFactory.createUser(login);
         
-        const response = await supertest(app).post(`/signup`).send(login);
+        const response = await supertest(app).post(`/sign-up`).send(login);
         expect(response.statusCode).toBe(409);
       })
 });

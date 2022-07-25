@@ -7,3 +7,27 @@ export async function insertTest(test: CreateTestData){
         data: test
     })
 }
+
+// export async function getTestsByDiscipline(){
+//     return prisma.test.findMany();
+// }
+
+export async function getTestsByDiscipline(){
+    return prisma.term.findMany({
+        include: {
+            disciplines: {
+                include: {
+                    TeacherDiscipline: {
+                        include: {
+                            teacher: true
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+export async function getTestsByTeacher(){
+    return prisma.term.findMany({});
+}

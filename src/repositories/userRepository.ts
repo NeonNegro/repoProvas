@@ -8,10 +8,8 @@ export async function findById(id: number) {
 }
 
 export async function findUserByEmail(email: string) {
-  return prisma.user.findUnique({
-    where: {
-      email,
-    },
+  return prisma.user.findFirst({
+    where: { email }
   });
 }
 
