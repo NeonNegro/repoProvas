@@ -6,7 +6,7 @@ import 'express-async-errors';
 
 
 const app = express();
-app.use(json);
+app.use(json());
 app.use(router);
 app.use(handleErrorsMiddleware);
 

@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 
 import { errorTypeToStatusCode, isAppError } from "../utils/errorUtils.js";
 
-export default function handleErrorsMiddleware(err, req: Request, res: Response, next: NextFunction) {
+export default function handleErrorsMiddleware(err: any, req: Request, res: Response, next: NextFunction) {
   console.log("Ooops! An error occured!", err);
   
   if(isAppError(err)) {
