@@ -15,7 +15,8 @@ export async function getTests(req: Request, res: Response){
 
     const tests = await testService.getTests(filter);
 
-    res.send(tests);
+
+    res.send({tests});
 }
 
 

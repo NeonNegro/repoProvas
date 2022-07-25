@@ -2,16 +2,40 @@ import app from '../src/app.js';
 import supertest from 'supertest';
 import { prisma } from '../src/configs/database.js';
 import userFactory from './factories/userFactory.js';
+import { array } from 'joi';
 
 const agent = supertest(app);
 
 //beforeAll(() => { items.push('abacate'); });
 
 beforeEach(async () => {
-    await prisma.$executeRaw`TRUNCATE TABLE users;`;
-  });
+  await prisma.$executeRaw`TRUNCATE TABLE users;`;
+});
+
+describe("Test tests suit", ()=>{
+  it('search tests by discipline', async  ()=>{
+    const login = userFactory.createLogin();
+    //await supertest(app).post(`/sign-up`).send(login);
+    const user: any = await userFactory.createUser(login);
+        
+    const response_login = await supertest(app).post(`/sign-in`).send({
+          email: user.email,
+          password: user.plainPassword
+        });
+    const token = response_login.body.token;
+    const response = await agent.get('/tests?groupBy=disciplines').set("Authorization",token);
+    const status= response.status;
+    expect(status).toEqual(200);
+    //console.log(response.body);
+
+
+  })
+
+})
 
 describe("User tests suit", () => {
+    
+
     it("given email and password, create user", async () => {
         
         const login = userFactory.createLogin();
