@@ -13,9 +13,8 @@ beforeEach(async () => {
 });
 
 describe("Test tests suit", ()=>{
-  it('search tests by discipline', async  ()=>{
+  it('search tests by discipline', async () => {
     const login = userFactory.createLogin();
-    //await supertest(app).post(`/sign-up`).send(login);
     const user: any = await userFactory.createUser(login);
         
     const response_login = await supertest(app).post(`/sign-in`).send({
@@ -26,12 +25,53 @@ describe("Test tests suit", ()=>{
     const response = await agent.get('/tests?groupBy=disciplines').set("Authorization",token);
     const status= response.status;
     expect(status).toEqual(200);
-    //console.log(response.body);
+  });
 
+  it('fail to bring tests (discipline) if invalid token', async () => {
+    const response = await agent.get('/tests?groupBy=disciplines');
+    expect(response.status).toEqual(401);
+  });
 
-  })
+  it('search tests by teacher', async () => {
+    const login = userFactory.createLogin();
+    const user: any = await userFactory.createUser(login);
+        
+    const response_login = await supertest(app).post(`/sign-in`).send({
+          email: user.email,
+          password: user.plainPassword
+        });
+    const token = response_login.body.token;
+    const response = await agent.get('/tests?groupBy=teachers').set("Authorization",token);
+    const status= response.status;
+    expect(status).toEqual(200);
+  });
+
+  it('fail to bring tests (teacher) if invalid token', async () => {
+    const response = await agent.get('/tests?groupBy=teachers');
+    expect(response.status).toEqual(401);
+  });
 
 })
+
+describe('Category tests suit', () => {
+  it('search categories', async () => {
+    const login = userFactory.createLogin();
+    const user: any = await userFactory.createUser(login);
+        
+    const response_login = await supertest(app).post(`/sign-in`).send({
+          email: user.email,
+          password: user.plainPassword
+        });
+    const token = response_login.body.token;
+    const response = await agent.get('/categories').set("Authorization",token);
+    const status= response.status;
+    expect(status).toEqual(200);
+  });
+  it('fail to bring categories if invalid token', async () => {
+    const response = await agent.get('/categories');
+    expect(response.status).toEqual(401);
+  })
+});
 
 describe("User tests suit", () => {
     
